@@ -1,0 +1,104 @@
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 206 100% 96%;
+    --foreground: 225 30% 15%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 225 30% 15%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 225 30% 15%;
+
+    --primary: 201 90% 42%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 36 24% 95%;
+    --secondary-foreground: 225 30% 15%;
+
+    --muted: 36 22% 95%;
+    --muted-foreground: 218 16% 38%;
+
+    --accent: 18 88% 60%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 82% 63%;
+    --destructive-foreground: 210 40% 98%;
+
+    --success: 137 63% 37%;
+    --success-foreground: 210 40% 98%;
+
+    --warning: 36 89% 45%;
+    --warning-foreground: 0 0% 100%;
+
+    --border: 32 24% 86%;
+    --input: 32 24% 86%;
+    --ring: 201 90% 42%;
+
+    --radius: 0.75rem;
+
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 225 30% 15%;
+    --sidebar-primary: 201 90% 42%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 34 34% 94%;
+    --sidebar-accent-foreground: 225 30% 15%;
+    --sidebar-border: 32 24% 86%;
+    --sidebar-ring: 201 90% 42%;
+
+    --chart-1: 201 90% 42%;
+    --chart-2: 137 63% 37%;
+    --chart-3: 18 88% 60%;
+    --chart-4: 40 76% 49%;
+    --chart-5: 0 82% 63%;
+
+    --font-sans: 'Sora', system-ui, -apple-system, sans-serif;
+    --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    background-image: linear-gradient(180deg, hsl(206 100% 96%), hsl(196 80% 93%));
+    background-attachment: fixed;
+  }
+}
+
+@layer utilities {
+  .font-mono {
+    font-family: var(--font-mono);
+  }
+  .glow-primary {
+    box-shadow: 0 12px 28px hsl(201 90% 42% / 0.14);
+  }
+  .glow-success {
+    box-shadow: 0 10px 30px hsl(137 63% 37% / 0.15);
+  }
+  .glow-danger {
+    box-shadow: 0 10px 30px hsl(0 82% 63% / 0.15);
+  }
+  .glow-accent {
+    box-shadow: 0 12px 28px hsl(18 88% 60% / 0.14);
+  }
+  .gradient-primary {
+    background: linear-gradient(135deg, hsl(201 90% 42%), hsl(18 88% 60%));
+  }
+  .gradient-card {
+    background: linear-gradient(180deg, hsl(0 0% 100%), hsl(36 40% 97%));
+  }
+  .text-gradient {
+    background: linear-gradient(135deg, hsl(201 90% 42%), hsl(18 88% 60%));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+}

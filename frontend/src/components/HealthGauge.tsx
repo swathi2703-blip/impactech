@@ -20,7 +20,7 @@ export function HealthGauge({ score, size = 180 }: HealthGaugeProps) {
           cy={size / 2}
           r={radius}
           fill="none"
-          stroke="hsl(215,20%,14%)"
+          stroke="hsl(32,24%,86%)"
           strokeWidth={strokeWidth}
         />
         <motion.circle

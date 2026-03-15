@@ -34,7 +34,7 @@ export function AppSidebar() {
             <Activity className="w-4 h-4 text-primary-foreground" />
           </div>
           {!collapsed && (
-            <span className="text-lg font-bold text-gradient">DevSentinel</span>
+            <span className="text-lg font-bold text-gradient">DevAI</span>
           )}
         </div>
 

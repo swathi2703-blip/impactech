@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Bot, Send, Sparkles } from "lucide-react";
+import { Bot, Loader2, Send, Sparkles } from "lucide-react";
 import { useState } from "react";
 import { CodeBlock } from "@/components/CodeBlock";
 
@@ -27,9 +27,56 @@ const initialMessages: Message[] = [
   },
 ];
 
+const MENTOR_ENDPOINT = (import.meta.env.VITE_MENTOR_ENDPOINT as string | undefined)
+  ?? "http://localhost:8081/api/mentor/chat";
+
 export default function Mentor() {
-  const [messages] = useState<Message[]>(initialMessages);
+  const [messages, setMessages] = useState<Message[]>(initialMessages);
   const [input, setInput] = useState("");
+  const [isSending, setIsSending] = useState(false);
+
+  const sendToMentor = async () => {
+    const prompt = input.trim();
+    if (!prompt || isSending) return;
+
+    setMessages((prev) => [...prev, { role: "user", content: prompt }]);
+    setInput("");
+    setIsSending(true);
+
+    try {
+      const res = await fetch(MENTOR_ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt }),
+      });
+
+      if (!res.ok) {
+        let detail = "Unable to reach AI Mentor endpoint.";
+        try {
+          const data = await res.json();
+          if (data?.detail) detail = String(data.detail);
+        } catch {
+          // Keep fallback detail for non-JSON errors.
+        }
+        throw new Error(detail);
+      }
+
+      const data = await res.json();
+      const reply = (data?.reply as string | undefined)?.trim() || "No response returned by mentor.";
+      setMessages((prev) => [...prev, { role: "assistant", content: reply }]);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Unexpected error while contacting AI Mentor.";
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: "assistant",
+          content: `I couldn't connect to the AI Mentor service. ${message}`,
+        },
+      ]);
+    } finally {
+      setIsSending(false);
+    }
+  };
 
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="max-w-4xl mx-auto h-[calc(100vh-7rem)] flex flex-col">
@@ -75,12 +122,22 @@ export default function Mentor() {
         <textarea
           value={input}
           onChange={(e) => setInput(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !e.shiftKey) {
+              e.preventDefault();
+              void sendToMentor();
+            }
+          }}
           placeholder="Paste code or ask a question..."
           className="flex-1 bg-transparent text-sm text-foreground placeholder:text-muted-foreground resize-none outline-none font-mono min-h-[40px] max-h-[120px]"
           rows={1}
         />
-        <button className="p-2 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors">
-          <Send className="w-4 h-4" />
+        <button
+          onClick={() => void sendToMentor()}
+          disabled={!input.trim() || isSending}
+          className="p-2 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+        >
+          {isSending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
         </button>
       </div>
     </motion.div>

@@ -23,6 +23,12 @@ export function RadarChart({ data, size = 200 }: RadarChartProps) {
 
   return (
     <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
+      <defs>
+        <linearGradient id="radarFill" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stopColor="hsl(201,90%,42%)" stopOpacity="0.28" />
+          <stop offset="100%" stopColor="hsl(18,88%,60%)" stopOpacity="0.2" />
+        </linearGradient>
+      </defs>
       {/* Grid */}
       {gridLevels.map((level) => {
         const pts = data.map((_, i) => {
@@ -30,18 +36,18 @@ export function RadarChart({ data, size = 200 }: RadarChartProps) {
           return `${p.x},${p.y}`;
         });
         return (
-          <polygon key={level} points={pts.join(" ")} fill="none" stroke="hsl(215,20%,18%)" strokeWidth="1" />
+          <polygon key={level} points={pts.join(" ")} fill="none" stroke="hsl(32,24%,86%)" strokeWidth="1" />
         );
       })}
 
       {/* Axes */}
       {data.map((_, i) => {
         const p = getPoint(i, 100);
-        return <line key={i} x1={center} y1={center} x2={p.x} y2={p.y} stroke="hsl(215,20%,18%)" strokeWidth="1" />;
+        return <line key={i} x1={center} y1={center} x2={p.x} y2={p.y} stroke="hsl(32,24%,86%)" strokeWidth="1" />;
       })}
 
       {/* Data polygon */}
-      <polygon points={polygon} fill="hsl(212,100%,67%,0.15)" stroke="hsl(212,100%,67%)" strokeWidth="2" />
+      <polygon points={polygon} fill="url(#radarFill)" stroke="hsl(201,90%,42%)" strokeWidth="2.2" />
 
       {/* Points and labels */}
       {data.map((d, i) => {
@@ -49,14 +55,14 @@ export function RadarChart({ data, size = 200 }: RadarChartProps) {
         const labelP = getPoint(i, 120);
         return (
           <g key={i}>
-            <circle cx={p.x} cy={p.y} r="4" fill="hsl(212,100%,67%)" />
+            <circle cx={p.x} cy={p.y} r="4.3" fill="hsl(18,88%,60%)" />
             <text
               x={labelP.x}
               y={labelP.y}
               textAnchor="middle"
               dominantBaseline="middle"
               className="fill-muted-foreground"
-              style={{ fontSize: "10px", fontFamily: "Inter" }}
+              style={{ fontSize: "10px", fontFamily: "Sora", fontWeight: 500 }}
             >
               {d.label}
             </text>
